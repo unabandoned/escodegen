@@ -25,10 +25,11 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var esprima = require('./3rdparty/esprima-1.0.0-dev'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect,
+    escodegen = require('./support/loader'),
+    assert = require('node:assert'),
     data;
 
 data = [{
@@ -986,8 +987,8 @@ function runTest(options, source, expectedCode) {
     actualCode = escodegen.generate(tree, options);
     tree = esprima.parse(actualCode);
     actualTree = JSON.stringify(tree, adjustRegexLiteral, 4);
-    expect(actualTree).to.be.equal(expectedTree);
-    expect(actualCode).to.be.equal(expectedCode);
+    assert.strictEqual(actualTree, expectedTree);
+    assert.strictEqual(actualCode, expectedCode);
 }
 
 describe('options test', function () {

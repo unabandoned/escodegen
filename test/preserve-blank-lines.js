@@ -25,11 +25,12 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var fs = require('fs'),
     esprima = require('esprima'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect;
+    escodegen = require('./support/loader'),
+    assert = require('node:assert');
 
 function test(code, expected) {
     var tree, actual, options, StringObject;
@@ -56,7 +57,7 @@ function test(code, expected) {
 
     // for UNIX text comment
     actual = escodegen.generate(tree, options);
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 }
 
 describe('preserve blank lines test', function () {

@@ -24,10 +24,11 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var esprima = require('./3rdparty/esprima-1.0.0-dev'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect,
+    escodegen = require('./support/loader'),
+    assert = require('node:assert'),
     fixtures;
 
 function slug(name) {
@@ -202,7 +203,7 @@ function testAPI(code, result) {
         res = escodegen[result.call].apply(escodegen, result.args);
     }
     actual = JSON.stringify(res, adjustRegexLiteral, 4);
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 }
 
 describe('API test', function () {

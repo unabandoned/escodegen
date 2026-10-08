@@ -24,11 +24,12 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var fs = require('fs'),
     esprima = require('./3rdparty/esprima-1.0.0-dev'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect,
+    escodegen = require('./support/loader'),
+    assert = require('node:assert'),
     fixtures;
 
 function slug(name) {
@@ -75,7 +76,7 @@ function testIdentity(code) {
     expected = JSON.stringify(tree, adjustRegexLiteral, 4);
     tree = esprima.parse(escodegen.generate(tree), options);
     actual = JSON.stringify(tree, adjustRegexLiteral, 4);
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 
     // second, attachComments
     commentOptions = {
@@ -90,7 +91,7 @@ function testIdentity(code) {
     commentTree = escodegen.attachComments(commentTree, commentTree.comments, commentTree.tokens);
     tree = esprima.parse(escodegen.generate(commentTree), options);
     actual = JSON.stringify(tree, adjustRegexLiteral, 4);
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 }
 
 describe('identity test', function () {

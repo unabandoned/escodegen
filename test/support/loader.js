@@ -1,6 +1,5 @@
-#!/usr/bin/env node
 /*
-  Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
+  Copyright (C) 2014 Yusuke Suzuki <utatane.tea@gmail.com>
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -22,43 +21,24 @@
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
-/*jslint sloppy:true node:true */
+'use strict';
 
 var fs = require('fs'),
     path = require('path'),
-    root = path.join(path.dirname(fs.realpathSync(__filename)), '..'),
-    escodegen = require(root),
-    optionator = require('optionator')({
-        prepend: 'Usage: esgenerate [options] file.json ...',
-        options: [
-            {
-                option: 'config',
-                alias: 'c',
-                type: 'String',
-                description: 'configuration json for escodegen'
-            }
-        ]
-    }),
-    args = optionator.parse(process.argv),
-    files = args._,
-    options;
+    root = path.join(path.dirname(fs.realpathSync(__filename)), '..', '..'),
+    escodegen = require(root);
 
-if (files.length === 0) {
-    console.log(optionator.generateHelp());
-    process.exit(1);
-}
+// Make generate's first argument freezed.
+function freezing(escodegen) {
+    var original = escodegen.generate;
+    escodegen.generate = function () {
+        var ast = arguments[0];
+        Object.freeze(ast);
+        return original.apply(this, arguments);
+    };
+    return escodegen;
+};
 
-if (args.config) {
-    try {
-        options = JSON.parse(fs.readFileSync(args.config, 'utf-8'))
-    } catch (err) {
-        console.error('Error parsing config: ', err);
-    }
-}
+module.exports = freezing(escodegen);
 
-files.forEach(function (filename) {
-    var content = fs.readFileSync(filename, 'utf-8');
-    console.log(escodegen.generate(JSON.parse(content), options));
-});
 /* vim: set sw=4 ts=4 et tw=80 : */

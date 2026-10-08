@@ -24,11 +24,12 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var fs = require('fs'),
     acorn = require('acorn'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect;
+    escodegen = require('./support/loader'),
+    assert = require('node:assert');
 
 function test(code, expected) {
     var tree, actual, options, StringObject;
@@ -46,7 +47,7 @@ function test(code, expected) {
 
     // for UNIX text comment
     actual = escodegen.generate(tree).replace(/[\n\r]$/, '') + '\n';
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 }
 
 function testMin(code, expected) {
@@ -68,7 +69,7 @@ function testMin(code, expected) {
         format: escodegen.FORMAT_MINIFY,
         raw: false
     }).replace(/[\n\r]$/, '') + '\n';
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 }
 
 describe('compare acorn es6 test', function () {

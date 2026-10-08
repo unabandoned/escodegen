@@ -24,11 +24,12 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var fs = require('fs'),
     esprima = require('./3rdparty/esprima-harmony.original'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect;
+    escodegen = require('./support/loader'),
+    assert = require('node:assert');
 
 function test(code, expected) {
     var tree, actual, options, StringObject;
@@ -56,7 +57,7 @@ function test(code, expected) {
             }
         }
     }).replace(/[\n\r]$/, '') + '\n';
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 }
 
 describe('comment test', function () {
