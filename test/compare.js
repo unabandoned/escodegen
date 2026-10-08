@@ -24,11 +24,12 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var fs = require('fs'),
     esprima = require('./3rdparty/esprima-1.0.0-dev'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect;
+    escodegen = require('./support/loader'),
+    assert = require('node:assert');
 
 function test(code, expected) {
     var tree, actual, options, StringObject;
@@ -47,7 +48,7 @@ function test(code, expected) {
 
     // for UNIX text comment
     actual = escodegen.generate(tree).replace(/[\n\r]$/, '') + '\n';
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 }
 
 describe('compare test', function () {

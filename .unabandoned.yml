@@ -1,0 +1,28 @@
+schema: 1
+
+package: "@unabandoned/escodegen"
+
+upstream:
+  repo: estools/escodegen
+  reason: "unmaintained upstream — last release (2.1.0) June 2023, optional source-map dependency stuck on ~0.6.1"
+
+summary: >-
+  Generates JavaScript source code (and optionally source maps) from an
+  ESTree / Mozilla Parser API AST.
+
+why-forked: >-
+  TheTechNetwork/CyberChef ships it at runtime, and upstream is abandoned while
+  carrying a runtime tree: estraverse, esutils, esprima and an outdated optional
+  source-map (~0.6.1 against a current 0.8.x). Forked so we own that tree —
+  source-map is brought forward, esprima (only needed by the removed CLI) moves
+  to dev, and Renovate keeps the rest current.
+
+used-by:
+  - consumer: TheTechNetwork/CyberChef
+    purpose: >-
+      JavaScript Beautify operation — regenerates formatted source from an
+      esprima AST, with comments attached via attachComments
+
+status: active
+
+tags: [javascript, ast, estree, codegen, source-map]

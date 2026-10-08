@@ -24,11 +24,12 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var fs = require('fs'),
     esprima = require('./3rdparty/esprima-harmony.original'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect,
+    escodegen = require('./support/loader'),
+    assert = require('node:assert'),
     DIR;
 
 function test(code, expected) {
@@ -48,7 +49,7 @@ function test(code, expected) {
 
     // for UNIX text comment
     actual = escodegen.generate(tree).replace(/[\n\r]$/, '') + '\n';
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 }
 
 function testMin(code, expected) {
@@ -71,7 +72,7 @@ function testMin(code, expected) {
         format: escodegen.FORMAT_MINIFY,
         raw: false
     }).replace(/[\n\r]$/, '') + '\n';
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 
     // And ensure that minified value is exactly equal.
     tree2 = esprima.parse(actual, options);
@@ -79,7 +80,7 @@ function testMin(code, expected) {
         format: escodegen.FORMAT_MINIFY,
         raw: false
     }).replace(/[\n\r]$/, '') + '\n';
-    expect(actual2).to.be.equal(actual);
+    assert.strictEqual(actual2, actual);
 }
 
 DIR = 'compare-harmony';

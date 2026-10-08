@@ -25,11 +25,12 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var esprima = require('./3rdparty/esprima-1.0.0-dev'),
-    escodegen = require('./loader'),
+    escodegen = require('./support/loader'),
     sourcemap = require('source-map'),
-    chai = require('chai'),
-    expect = chai.expect;
+    assert = require('node:assert');
 
 describe('source map test', function () {
     it('function expression identifier test', function () {
@@ -68,12 +69,12 @@ describe('source map test', function () {
         });
 
         // contains mapping for identifier
-        expect(result.map._mappings.toArray().some(function (mapping) {
+        assert.strictEqual(result.map._mappings.toArray().some(function (mapping) {
             return mapping.generatedLine == 1 &&
                 mapping.generatedColumn == 9 &&
                 mapping.originalLine == 2 &&
                 mapping.originalColumn == 4;
-        })).to.be.true;
+        }), true);
     });
 
 
@@ -142,9 +143,9 @@ describe('source map test', function () {
         }
 
         // found x param mapping
-        expect(result.map._mappings.toArray().filter(isXParam).length).to.be.equal(1);
+        assert.strictEqual(result.map._mappings.toArray().filter(isXParam).length, 1);
         // found y param mapping
-        expect(result.map._mappings.toArray().filter(isYParam).length).to.be.equal(1);
+        assert.strictEqual(result.map._mappings.toArray().filter(isYParam).length, 1);
     });
 
     it('MemberExpression test', function () {
@@ -212,10 +213,10 @@ describe('source map test', function () {
         }
 
         // found object mapping
-        expect(result.map._mappings.toArray().filter(isObject).length).to.be.equal(1);
+        assert.strictEqual(result.map._mappings.toArray().filter(isObject).length, 1);
 
         // found one property mapping
-        expect(result.map._mappings.toArray().filter(isProperty).length).to.be.equal(1);
+        assert.strictEqual(result.map._mappings.toArray().filter(isProperty).length, 1);
     });
 
     it('Declaration in Function test', function () {
@@ -297,9 +298,9 @@ describe('source map test', function () {
         });
 
         // "found a declaration node"
-        expect(result.map._mappings.toArray().filter(function (x) {
+        assert.strictEqual(result.map._mappings.toArray().filter(function (x) {
             return x.originalLine == 1 && x.originalColumn == 6;
-        }).length).to.be.equal(1);
+        }).length, 1);
     });
 
     it('names array test', function() {
@@ -466,10 +467,10 @@ describe('source map test', function () {
             sourceMapWithCode: true
         });
 
-        expect(result.map._names._array.length).to.be.equal(3);
+        assert.strictEqual(result.map._names._array.length, 3);
     });
 
-    it('sourceContent support', function() {
+    it('sourceContent support', async function() {
         var source = "(+ a b)"
         var ast = {
             "type": "ExpressionStatement",
@@ -496,11 +497,16 @@ describe('source map test', function () {
             sourceContent: source
         });
 
-        expect(output.code).to.be.equal("a + b;");
+        assert.strictEqual(output.code, "a + b;");
 
 
-        var consumer = new sourcemap.SourceMapConsumer(output.map.toString());
-        expect(consumer.sourceContentFor("sum.ls")).to.be.equal(source);
+        // SourceMapConsumer is asynchronous from source-map 0.7 onwards.
+        var consumer = await new sourcemap.SourceMapConsumer(output.map.toString());
+        try {
+            assert.strictEqual(consumer.sourceContentFor("sum.ls"), source);
+        } finally {
+            consumer.destroy();
+        }
     });
 
     it('sourceMapWithCode forces output format', function() {
@@ -517,7 +523,7 @@ describe('source map test', function () {
             sourceMapWithCode: true
         });
 
-        expect(result.code).to.be.a('string');
-        expect(result.map).to.be.equal(null);
+        assert.strictEqual(typeof result.code, 'string');
+        assert.strictEqual(result.map, null);
     });
 });

@@ -30,10 +30,11 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var esprima = require('./3rdparty/esprima-1.0.0-dev'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect,
+    escodegen = require('./support/loader'),
+    assert = require('node:assert'),
     data;
 
 data = {
@@ -14924,16 +14925,16 @@ function testIdentity(code, syntax) {
         raw: false
     };
 
-    expect(function () {
+    assert.doesNotThrow(function () {
         tree = esprima.parse(code, options);
         expected = JSON.stringify(tree, adjustRegexLiteral, 4);
         tree = esprima.parse(escodegen.generate(tree), options);
         actual = JSON.stringify(tree, adjustRegexLiteral, 4);
         tree = esprima.parse(escodegen.generate(syntax), options);
         actual2 = JSON.stringify(tree, adjustRegexLiteral, 4);
-    }).not.to.be.throw();
-    expect(actual).to.be.equal(expected);
-    expect(actual2).to.be.equal(expected);
+    });
+    assert.strictEqual(actual, expected);
+    assert.strictEqual(actual2, expected);
 }
 
 function testGenerate(expected, result) {
@@ -14944,10 +14945,10 @@ function testGenerate(expected, result) {
         parse: esprima.parse
     };
 
-    expect(function () {
+    assert.doesNotThrow(function () {
         actual = escodegen.generate(result.generateFrom, options);
-    }).not.to.be.throw();
-    expect(actual).to.be.equal(expected);
+    });
+    assert.strictEqual(actual, expected);
 }
 
 function isGeneratorIdentityFixture(result) {

@@ -31,10 +31,11 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var esprima = require('./3rdparty/esprima-harmony.original'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect,
+    escodegen = require('./support/loader'),
+    assert = require('node:assert'),
     data;
 
 data = {
@@ -7239,8 +7240,8 @@ function testIdentity(code, syntax) {
     actual = JSON.stringify(tree, adjustRegexLiteral, 4);
     tree = esprima.parse(escodegen.generate(syntax), options);
     actual2 = JSON.stringify(tree, adjustRegexLiteral, 4);
-    expect(actual).to.be.equal(expected);
-    expect(actual2).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
+    assert.strictEqual(actual2, expected);
 }
 
 function testGenerate(expected, result) {
@@ -7257,7 +7258,7 @@ function testGenerate(expected, result) {
     }
 
     actual = escodegen.generate(result.generateFrom, options);
-    expect(actual).to.be.equal(expected);
+    assert.strictEqual(actual, expected);
 }
 
 function isGeneratorIdentityFixture(result) {

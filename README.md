@@ -1,28 +1,28 @@
 ## Escodegen
-[![npm version](https://badge.fury.io/js/escodegen.svg)](http://badge.fury.io/js/escodegen)
-[![Build Status](https://secure.travis-ci.org/estools/escodegen.svg)](http://travis-ci.org/estools/escodegen)
-[![Dependency Status](https://david-dm.org/estools/escodegen.svg)](https://david-dm.org/estools/escodegen)
-[![devDependency Status](https://david-dm.org/estools/escodegen/dev-status.svg)](https://david-dm.org/estools/escodegen#info=devDependencies)
 
-Escodegen ([escodegen](http://github.com/estools/escodegen)) is an
+`@unabandoned/escodegen` is a maintained fork of
+[estools/escodegen](https://github.com/estools/escodegen), kept by the
+[unabandoned](https://github.com/unabandoned) org so its dependency tree stays
+current. The API is unchanged from upstream 2.1.0.
+
+Escodegen is an
 [ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
 (also popularly known as [JavaScript](http://en.wikipedia.org/wiki/JavaScript))
 code generator from [Mozilla's Parser API](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)
-AST. See the [online generator](https://estools.github.io/escodegen/demo/index.html)
-for a demo.
-
+AST.
 
 ### Install
 
-Escodegen can be used in a web browser:
+    npm install @unabandoned/escodegen
 
-    <script src="escodegen.browser.js"></script>
+To keep existing `require('escodegen')` / `import escodegen from 'escodegen'`
+calls working, install it under the original name with an npm alias:
 
-escodegen.browser.js can be found in tagged revisions on GitHub.
+    "escodegen": "npm:@unabandoned/escodegen@^2"
 
-Or in a Node.js application via npm:
-
-    npm install escodegen
+Source map generation (the `sourceMap` option) uses
+[source-map](https://github.com/mozilla/source-map), installed as an optional
+dependency.
 
 ### Usage
 
@@ -40,20 +40,8 @@ produces the string `'40 + 2'`.
 See the [API page](https://github.com/estools/escodegen/wiki/API) for
 options. To run the tests, execute `npm test` in the root directory.
 
-### Building browser bundle / minified browser bundle
-
-At first, execute `npm install` to install the all dev dependencies.
-After that,
-
-    npm run-script build
-
-will generate `escodegen.browser.js`, which can be used in browser environments.
-
-And,
-
-    npm run-script build-min
-
-will generate the minified file `escodegen.browser.min.js`.
+The `escodegen` / `esgenerate` command-line tools from upstream are not part
+of this fork.
 
 ### License
 

@@ -25,14 +25,13 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var fs = require('fs'),
     acorn = require('acorn'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    chaiExclude = require('chai-exclude'),
-    expect = chai.expect;
-
-chai.use(chaiExclude);
+    escodegen = require('./support/loader'),
+    assert = require('node:assert'),
+    excludingEvery = require('./support/excluding-every');
 
 function test(code, expected) {
     var tree, actual, actualTree, options;
@@ -49,8 +48,8 @@ function test(code, expected) {
     actual = escodegen.generate(tree);
     actualTree = acorn.parse(actual, options);
 
-    expect(actual).to.be.equal(expected);
-    expect(tree).excludingEvery(['start', 'end', 'raw']).to.deep.equal(actualTree);
+    assert.strictEqual(actual, expected);
+    assert.deepStrictEqual(excludingEvery(tree, ['start', 'end', 'raw']), excludingEvery(actualTree, ['start', 'end', 'raw']));
 }
 
 function testMin(code, expected) {
@@ -71,8 +70,8 @@ function testMin(code, expected) {
     }).replace(/[\n\r]$/, '') + '\n';
     actualTree = acorn.parse(actual, options);
 
-    expect(actual).to.be.equal(expected);
-    expect(tree).excludingEvery(['start', 'end', 'raw']).to.deep.equal(actualTree);
+    assert.strictEqual(actual, expected);
+    assert.deepStrictEqual(excludingEvery(tree, ['start', 'end', 'raw']), excludingEvery(actualTree, ['start', 'end', 'raw']));
 }
 
 describe('compare acorn es2021 test', function () {

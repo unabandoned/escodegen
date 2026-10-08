@@ -24,10 +24,11 @@
 
 'use strict';
 
+var { describe, it } = require('node:test');
+
 var esprima = require('./3rdparty/esprima-1.0.0-dev'),
-    escodegen = require('./loader'),
-    chai = require('chai'),
-    expect = chai.expect,
+    escodegen = require('./support/loader'),
+    assert = require('node:assert'),
     StringData,
     ObjectData;
 
@@ -56,10 +57,10 @@ function runTest(expected, result, verbatim) {
         verbatim: verbatim
     };
 
-    expect(function () {
+    assert.doesNotThrow(function () {
         actual = escodegen.generate(result, options);
-    }).not.to.be.throw();
-    expect(expected).to.be.equal(actual);
+    });
+    assert.strictEqual(expected, actual);
 }
 
 StringData = {

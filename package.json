@@ -1,22 +1,16 @@
 {
-    "name": "escodegen",
+    "name": "@unabandoned/escodegen",
     "description": "ECMAScript code generator",
-    "homepage": "http://github.com/estools/escodegen",
+    "homepage": "https://github.com/unabandoned/escodegen#readme",
     "main": "escodegen.js",
-    "bin": {
-        "esgenerate": "./bin/esgenerate.js",
-        "escodegen": "./bin/escodegen.js"
-    },
     "files": [
         "LICENSE.BSD",
         "README.md",
-        "bin",
-        "escodegen.js",
-        "package.json"
+        "escodegen.js"
     ],
     "version": "2.1.0",
     "engines": {
-        "node": ">=6.0"
+        "node": ">=22.12"
     },
     "maintainers": [
         {
@@ -27,37 +21,31 @@
     ],
     "repository": {
         "type": "git",
-        "url": "http://github.com/estools/escodegen.git"
+        "url": "git+https://github.com/unabandoned/escodegen.git"
+    },
+    "bugs": {
+        "url": "https://github.com/unabandoned/escodegen/issues"
     },
     "dependencies": {
-        "estraverse": "^5.2.0",
-        "esutils": "^2.0.2",
-        "esprima": "^4.0.1"
+        "estraverse": "^5.3.0",
+        "esutils": "^2.0.3"
     },
     "optionalDependencies": {
-        "source-map": "~0.6.1"
+        "source-map": "^0.8.0"
     },
     "devDependencies": {
-        "acorn": "^8.0.4",
-        "bluebird": "^3.4.7",
-        "bower-registry-client": "^1.0.0",
-        "chai": "^4.2.0",
-        "chai-exclude": "^2.0.2",
-        "commonjs-everywhere": "^0.9.7",
-        "gulp": "^4.0.2",
-        "gulp-eslint": "^6.0.0",
-        "gulp-mocha": "^7.0.2",
-        "minimist": "^1.2.5",
-        "optionator": "^0.9.1",
-        "semver": "^7.3.4"
+        "@commitlint/cli": "21.2.3",
+        "@commitlint/config-conventional": "21.2.3",
+        "acorn": "8.19.0",
+        "esprima": "4.0.1"
     },
     "license": "BSD-2-Clause",
     "scripts": {
-        "test": "gulp travis",
-        "unit-test": "gulp test",
-        "lint": "gulp lint",
-        "release": "node tools/release.js",
-        "build-min": "./node_modules/.bin/cjsify -ma path: tools/entry-point.js > escodegen.browser.min.js",
-        "build": "./node_modules/.bin/cjsify -a path: tools/entry-point.js > escodegen.browser.js"
+        "test": "node --test test/*.js",
+        "prepare": "git config core.hooksPath .githooks || true"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
     }
 }
